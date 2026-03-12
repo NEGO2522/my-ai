@@ -67,7 +67,4 @@ This turns the platform into a **collaborative AI knowledge hub**.
 
 ---
 
-# Workflow
-
-The system works through a simple pipeline.
-
+That's Much About it I think U Guys Like it. 
