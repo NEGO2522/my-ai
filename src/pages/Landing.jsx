@@ -59,7 +59,7 @@ const Landing = () => {
           </div>
           
           <div className="flex items-center gap-6">
-            <a href="https://github.com" className="text-sm font-medium text-gray-400 transition hover:text-white">GitHub</a>
+            <a href="https://github.com/NEGO2522/my-ai" className="text-sm font-medium text-gray-400 transition hover:text-white">GitHub</a>
             <a href="/docs" className="text-sm font-medium text-gray-400 transition hover:text-white">Docs</a>
             <Link
               to="/ai"
