@@ -1,159 +1,237 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Search, Lightbulb, Paperclip, ArrowUp, Clock, ChevronDown, Sun, Moon, Settings, Menu, MessageSquare } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import {
+  ArrowUp,
+  ChevronDown,
+  Clock,
+  Lightbulb,
+  Menu,
+  MessageSquare,
+  Moon,
+  Paperclip,
+  Settings,
+  Sparkles,
+  Sun,
+} from 'lucide-react';
+
+const models = [
+  {
+    category: 'GPT Models',
+    items: [
+      { value: 'gpt-4o', label: 'GPT-4o (Latest)' },
+      { value: 'gpt-4o-mini', label: 'GPT-4o Mini' },
+    ],
+  },
+  {
+    category: 'Claude Models',
+    items: [{ value: 'claude-3.5-sonnet', label: 'Claude 3.5 Sonnet' }],
+  },
+  {
+    category: 'Gemini Models',
+    items: [{ value: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash' }],
+  },
+];
+
+const sidebarItems = [
+  { label: 'New Chat', icon: MessageSquare },
+  { label: 'History', icon: Clock },
+  { label: 'Settings', icon: Settings },
+];
 
 const AI = () => {
-  const [selectedModel, setSelectedModel] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
-  const [darkMode, setDarkMode] = useState(true); 
+  const [selectedModel, setSelectedModel] = useState('GPT-4o (Latest)');
+  const [isModelMenuOpen, setIsModelMenuOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [darkMode, setDarkMode] = useState(true);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+        setIsModelMenuOpen(false);
       }
     };
+
     document.addEventListener('mousedown', handleOutsideClick);
     return () => document.removeEventListener('mousedown', handleOutsideClick);
-  }, [isOpen]);
+  }, []);
 
-  const models = [
-    { category: 'GPT Models', items: [{ value: 'gpt-4o', label: 'GPT-4o (Latest)' }, { value: 'gpt-4o-mini', label: 'GPT-4o Mini' }] },
-    { category: 'Claude Models', items: [{ value: 'claude-3.5-sonnet', label: 'Claude 3.5 Sonnet' }] },
-    { category: 'Gemini Models', items: [{ value: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash' }] }
-  ];
+  const pageTheme = darkMode
+    ? 'bg-[#090b10] text-white'
+    : 'bg-slate-100 text-slate-900';
+
+  const cardTheme = darkMode
+    ? 'border-white/10 bg-white/5'
+    : 'border-slate-200 bg-white';
 
   return (
-    <div className={`min-h-screen flex font-sans transition-colors duration-300 ${darkMode ? 'bg-[#121212] text-white' : 'bg-[#f4f4f4] text-[#1a1a1a]'}`}>
-      
-      {/* Sidebar Navigation */}
-      <aside className={`
-        ${isSidebarOpen ? 'w-64' : 'w-16'} 
-        flex flex-col py-4 border-r-2 h-screen sticky top-0 transition-all duration-300 ease-in-out z-20
-        ${darkMode ? 'bg-[#1e1e1e] border-gray-800' : 'bg-white/50 border-gray-300 backdrop-blur-sm'}
-      `}>
-        
-        {/* Top Section: Hamburger Only */}
-        <div className="flex flex-col items-start px-3">
-          <button 
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className={`p-2 rounded-xl transition-colors mb-6 flex-shrink-0 ${darkMode ? 'hover:bg-gray-800 text-gray-400' : 'hover:bg-gray-200 text-gray-600'}`}
+    <div className={`min-h-screen font-sans transition-colors duration-300 ${pageTheme}`}>
+      <div className="relative flex min-h-screen overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(59,130,246,0.16),transparent_30%),radial-gradient(circle_at_85%_10%,rgba(168,85,247,0.16),transparent_25%)]" />
+
+        <aside
+          className={`z-10 flex h-screen flex-col border-r backdrop-blur-xl transition-all duration-300 ${
+            isSidebarOpen ? 'w-64 p-4' : 'w-20 p-3'
+          } ${darkMode ? 'border-white/10 bg-[#0f131c]/90' : 'border-slate-200 bg-white/85'}`}
+        >
+          <button
+            onClick={() => setIsSidebarOpen((prev) => !prev)}
+            className={`mb-6 inline-flex w-fit items-center rounded-xl p-2 transition ${
+              darkMode ? 'hover:bg-white/10' : 'hover:bg-slate-100'
+            }`}
+            aria-label="Toggle sidebar"
           >
             <Menu size={20} />
           </button>
 
-          {/* Navigation Icons in Series */}
-          <div className="flex flex-col gap-6 w-full">
-            {/* New Chat / Message Icon */}
-            <div className="flex items-center gap-4 cursor-pointer group px-2">
-              <MessageSquare size={20} className="text-gray-400 group-hover:text-gray-600 transition flex-shrink-0" />
-              <span className={`text-sm font-medium transition-opacity duration-300 whitespace-nowrap ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                New Chat
-              </span>
-            </div>
-
-            {/* History Icon */}
-            <div className="flex items-center gap-4 cursor-pointer group px-2">
-              <Clock size={20} className="text-gray-400 group-hover:text-gray-600 transition flex-shrink-0" />
-              <span className={`text-sm font-medium transition-opacity duration-300 whitespace-nowrap ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                History
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Divider Line */}
-        <div className={`h-[1px] my-6 mx-4 transition-all ${darkMode ? 'bg-gray-800' : 'bg-gray-200'} ${isSidebarOpen ? 'w-auto' : 'w-6'}`} />
-
-        {/* Bottom Section: Settings */}
-        <div className="mt-auto px-5 mb-8">
-          <div className="flex items-center gap-4 cursor-pointer group">
-            <Settings size={20} className="text-gray-400 group-hover:text-gray-600 transition flex-shrink-0" />
-            <span className={`text-sm font-medium transition-opacity duration-300 whitespace-nowrap ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-              Settings
-            </span>
-          </div>
-        </div>
-      </aside>
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col items-center relative">
-        
-        {/* Top Header with Theme Toggle */}
-        <header className="absolute top-0 right-0 p-4 z-10">
-          <button 
-            onClick={() => setDarkMode(!darkMode)}
-            className={`p-2 rounded-full transition ${darkMode ? 'hover:bg-gray-800 text-yellow-400' : 'hover:bg-gray-100 text-gray-600'}`}
-          >
-            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
-        </header>
-        
-        <main className="flex-1 flex flex-col items-center justify-center w-full max-w-3xl px-6">
-          <h1 className="text-4xl font-medium mb-8 tracking-tight">What can I help with?</h1>
-          
-          {/* Search Container */}
-          <div className={`w-full rounded-[32px] p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border transition-all ${darkMode ? 'bg-[#1e1e1e] border-gray-800' : 'bg-white border-gray-100'}`}>
-            <textarea 
-              className={`w-full resize-none border-none focus:ring-0 focus:outline-none text-lg placeholder-gray-400 min-h-[100px] px-4 pt-2 bg-transparent ${darkMode ? 'text-white' : 'text-[#1a1a1a]'}`}
-              placeholder="Ask anything"
-            />
-            
-            <div className="flex justify-between items-center mt-2 px-2">
-              <div className="flex items-center gap-2">
-                <button className={`p-2 rounded-full transition ${darkMode ? 'hover:bg-gray-800 text-gray-500' : 'hover:bg-gray-100 text-gray-400'}`}>
-                  <Paperclip size={18} />
-                </button>
-                
-                <div className="relative" ref={dropdownRef}>
-                  <button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className={`flex items-center gap-2 px-3 py-1.5 border rounded-full text-sm transition focus:outline-none focus:ring-0 ${darkMode ? 'bg-[#2a2a2a] border-gray-700 text-gray-300 hover:bg-[#333]' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+          <div className="space-y-2">
+            {sidebarItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.label}
+                  className={`flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left text-sm transition ${
+                    darkMode ? 'text-slate-300 hover:bg-white/10' : 'text-slate-700 hover:bg-slate-100'
+                  }`}
+                >
+                  <Icon size={18} />
+                  <span
+                    className={`whitespace-nowrap transition-opacity duration-300 ${
+                      isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none w-0'
+                    }`}
                   >
-                    <span className="truncate max-w-[120px]">{selectedModel || 'Select Model'}</span>
-                    <ChevronDown size={14} />
+                    {item.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </aside>
+
+        <div className="relative z-10 flex flex-1 flex-col">
+          <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 pb-2 pt-6">
+            <div>
+              <p className={`text-xs uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                My AI Workspace
+              </p>
+              <h1 className="mt-1 text-2xl font-semibold tracking-tight">What can I help with today?</h1>
+            </div>
+
+            <button
+              onClick={() => setDarkMode((prev) => !prev)}
+              className={`rounded-full p-2.5 transition ${
+                darkMode ? 'bg-white/10 text-yellow-300 hover:bg-white/15' : 'bg-white text-slate-700 hover:bg-slate-100'
+              }`}
+              aria-label="Toggle theme"
+            >
+              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+          </header>
+
+          <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 pb-10 pt-4">
+            <div className={`rounded-3xl border p-5 shadow-2xl ${cardTheme}`}>
+              <textarea
+                className={`min-h-[150px] w-full resize-none rounded-2xl border-none bg-transparent p-4 text-lg outline-none placeholder:text-slate-400 ${
+                  darkMode ? 'text-white' : 'text-slate-900'
+                }`}
+                placeholder="Ask anything about your documents..."
+              />
+
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-3 px-2 pb-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    className={`rounded-full p-2 transition ${
+                      darkMode ? 'text-slate-300 hover:bg-white/10' : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                    aria-label="Attach file"
+                  >
+                    <Paperclip size={17} />
                   </button>
-                  
-                  {isOpen && (
-                    <div className={`absolute top-full mt-1 left-0 w-48 border rounded-2xl shadow-lg z-50 p-1 ${darkMode ? 'bg-[#2a2a2a] border-gray-700' : 'bg-white border-gray-200'}`}>
-                      {models.map((group, i) => (
-                        <div key={i}>
-                          <div className={`px-3 py-1 text-[10px] font-bold uppercase ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{group.category}</div>
-                          {group.items.map((m, j) => (
-                            <button 
-                              key={j} 
-                              onClick={() => {setSelectedModel(m.label); setIsOpen(false)}} 
-                              className={`w-full text-left px-3 py-2 text-sm rounded-lg transition ${darkMode ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-50'}`}
-                            >
-                              {m.label}
-                            </button>
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+
+                  <div className="relative" ref={dropdownRef}>
+                    <button
+                      onClick={() => setIsModelMenuOpen((prev) => !prev)}
+                      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition ${
+                        darkMode
+                          ? 'border-white/15 bg-white/5 text-slate-200 hover:bg-white/10'
+                          : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                      }`}
+                    >
+                      <span className="max-w-[150px] truncate">{selectedModel}</span>
+                      <ChevronDown size={14} />
+                    </button>
+
+                    {isModelMenuOpen && (
+                      <div
+                        className={`absolute left-0 top-full z-50 mt-2 w-56 rounded-2xl border p-1 shadow-2xl ${
+                          darkMode ? 'border-white/15 bg-[#171b24]' : 'border-slate-200 bg-white'
+                        }`}
+                      >
+                        {models.map((group) => (
+                          <div key={group.category} className="mb-1 last:mb-0">
+                            <p className={`px-3 py-1 text-[10px] font-bold uppercase ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                              {group.category}
+                            </p>
+                            {group.items.map((model) => (
+                              <button
+                                key={model.value}
+                                onClick={() => {
+                                  setSelectedModel(model.label);
+                                  setIsModelMenuOpen(false);
+                                }}
+                                className={`block w-full rounded-lg px-3 py-2 text-left text-sm transition ${
+                                  darkMode ? 'text-slate-200 hover:bg-white/10' : 'text-slate-700 hover:bg-slate-50'
+                                }`}
+                              >
+                                {model.label}
+                              </button>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <button
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition ${
+                      darkMode
+                        ? 'border-white/15 bg-white/5 text-slate-200 hover:bg-white/10'
+                        : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    <Lightbulb size={14} />
+                    Reasoning
+                  </button>
                 </div>
-                
-                <button className={`flex items-center gap-1.5 px-3 py-1.5 border rounded-full text-sm transition ${darkMode ? 'bg-[#2a2a2a] border-gray-700 text-gray-300 hover:bg-[#333]' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
-                  <Lightbulb size={14} />
-                  <span>Reasoning</span>
+
+                <button
+                  className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition ${
+                    darkMode ? 'bg-white text-black hover:bg-slate-200' : 'bg-slate-900 text-white hover:bg-slate-700'
+                  }`}
+                >
+                  Send <ArrowUp size={16} strokeWidth={3} />
                 </button>
               </div>
-
-              <button className={`p-2.5 rounded-xl transition ${darkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'}`}>
-                <ArrowUp size={20} strokeWidth={3} />
-              </button>
             </div>
-          </div>
-        </main>
 
-        <footer className="pb-8 flex flex-col items-center gap-4 text-center">
-          <div className={`px-6 py-3 rounded-2xl max-w-md ${darkMode ? 'bg-gray-800/50' : 'bg-gray-200/50'}`}>
-            <p className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Developed By Students Developer.</p>
-          </div>
-          <p className="text-xs text-gray-400">AI can make mistakes. Please double-check responses.</p>
-        </footer>
+            <div className="mt-6 grid gap-3 md:grid-cols-3">
+              {['Summarize this document', 'Find key action items', 'Compare two files'].map((prompt) => (
+                <button
+                  key={prompt}
+                  className={`rounded-2xl border px-4 py-3 text-left text-sm transition ${cardTheme} ${
+                    darkMode ? 'hover:bg-white/10' : 'hover:bg-slate-50'
+                  }`}
+                >
+                  <Sparkles size={15} className="mb-2" />
+                  {prompt}
+                </button>
+              ))}
+            </div>
+          </main>
+
+          <footer className={`px-6 pb-6 text-center text-xs ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+            AI can make mistakes. Please verify important responses.
+          </footer>
+        </div>
       </div>
     </div>
   );
