@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AI from './pages/AI';
+import { ShaderAnimation } from './components/shader-animation';
 import Landing from './pages/Landing';
 
 function App() {
@@ -7,13 +8,11 @@ function App() {
     <Router>
       <Routes>
 
-        {/* This sets Landing as the default home page */}
-        <Route path="/" element={<Landing />} />
-        
+        {/* This sets ShaderAnimation as the default home page */}
+        <Route path="/" element={<ShaderAnimation />} />
+
         {/* Other routes */}
-
-        <Route path="/" element={<Landing />} />
-
+        <Route path="/landing" element={<Landing />} />
         <Route path="/ai" element={<AI />} />
       </Routes>
     </Router>
