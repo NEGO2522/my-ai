@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.8",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
     "@splinetool/react-spline": "^4.1.0",
     "@splinetool/runtime": "^1.12.69",
     "@tailwindcss/vite": "^4.2.1",
@@ -23,6 +25,7 @@
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.13.1",
     "shadcn": "^4.0.6",
+    "styled-components": "^6.3.11",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.1",
     "three": "^0.183.2",
